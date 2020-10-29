@@ -63,13 +63,21 @@ router.post('/login', (req, res) => {
       return;
     }
 
-    res.json({ user: dbUserData });
+    // add comment syntax in front of this line in the .then()
+    //res.json({ user: dbUserData });
 
     // Verify user
+    const validPassword = dbUserData.checkPassword(req.body.password);
+    if (!validPassword) {
+      res.status(400).json({ message: 'Incorrect password!' });
+      return;
+    }
+
+    res.json({ user: dbUserData, message: 'You are now logged in!' });
 
   });
 
-})
+});
 
 // PUT /api/users/1
 router.put('/:id', (req, res) => {
